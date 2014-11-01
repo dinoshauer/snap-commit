@@ -28,8 +28,8 @@ def upload():
         try:
             filepath = os.path.join(base, item)
             r = requests.post(
-                'http://0.0.0.0:8000/v1/snaps',
-                data=open(filepath, 'rb'),
+                'http://0.0.0.0:5000/v1',
+                files={'file': (item, open(filepath, 'rb'))}
             )
             if r.ok:
                 os.remove(filepath)
@@ -52,4 +52,5 @@ def run_hook():
 if __name__ == '__main__':
     import sys
     run_hook()
+    upload()
     sys.exit(0)

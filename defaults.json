@@ -1,0 +1,7 @@
+{
+    "image_dir": "~/.snap-commits",
+    "video_device": "/dev/video0",
+    "width": 640,
+    "height": 480,
+    "snap_server": "http://0.0.0.0:5000"
+}

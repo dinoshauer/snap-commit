@@ -22,6 +22,23 @@ def new_path(prefix=None):
         paths = [filename]
     return os.path.join(*paths)
 
+def upload():
+    base = '/home/k/.snap-commit'
+    for item in os.listdir(base):
+        try:
+            filepath = os.path.join(base, item)
+            r = requests.post(
+                'http://0.0.0.0:8000/v1/snaps',
+                data=open(filepath, 'rb'),
+            )
+            if r.ok:
+                os.remove(filepath)
+            else:
+                print 'error occurred', r.status_code, r.text
+        except requests.exceptions.RequestException, e:
+            print 'error occurred', e
+            print 'saving image for next upload'
+
 def run_hook():
     path = new_path('/home/k/.snap-commit')
     try:

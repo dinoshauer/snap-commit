@@ -33,8 +33,11 @@ def load_config(config_path=None):
 def new_path(prefix=None):
     commit = gitops.get_commit()
     remote = gitops.get_remote_url()
-    host = remote.split('.')[0].split('@')[1]
-    user, repo = remote.split(':')[1].replace('.git', '').split('/')
+    if remote:
+        host = remote.split('.')[0].split('@')[1]
+        user, repo = remote.split(':')[1].replace('.git', '').split('/')
+    else:
+        host, user, repo = ['', '', '']
     filename = '{}_{}_{}_{}_{}.jpg'.format(
         commit.commit_time*1000,
         commit.hex[:7],

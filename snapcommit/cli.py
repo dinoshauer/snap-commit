@@ -18,6 +18,7 @@ def write_hook_file(hook_path):
     with open(hook_path, 'a') as f:
         f.write('\npython /home/k/git/snap-commit/snapcommit/hook.py\n')
     os.chmod(hook_path, os.stat(hook_path).st_mode | stat.S_IEXEC)
+    secho('snap-commit enabled')
 
 def disable_hook(hook_path):
     with open(hook_path, 'r+') as f:
@@ -37,11 +38,13 @@ def cli():
 @cli.command()
 def enable():
     if gitops.is_repo:
-        if not _is_enabled(hook_path):
-            write_hook_file(hook_path)
-            secho('snap-commit enabled')
+        if os.path.isfile(hook_path):
+            if not _is_enabled(hook_path):
+                write_hook_file(hook_path)
+            else:
+                secho('snap-commit is already enabled for this repo')
         else:
-            secho('snap-commit is already enabled for this repo')
+            write_hook_file(hook_path)
 
 @cli.command()
 def disable():

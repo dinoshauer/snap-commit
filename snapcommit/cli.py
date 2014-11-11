@@ -45,6 +45,8 @@ def enable():
                 secho('snap-commit is already enabled for this repo')
         else:
             write_hook_file(hook_path)
+    else:
+        secho('Error: Directory is not a git repository')
 
 @cli.command()
 def disable():
@@ -56,7 +58,8 @@ def disable():
                 secho('snap-commit is not enabled for this repo')
         else:
             secho('no post-commit file found, snap-commit is not enabled')
-
+    else:
+        secho('Error: Directory is not a git repository')
 
 if __name__ == '__main__':
     cli()

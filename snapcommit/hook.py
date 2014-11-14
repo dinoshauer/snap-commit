@@ -23,7 +23,6 @@ DEFAULTS = {
 
 def load_config(config_path=None):
     config = {}
-    print path.join(path.dirname(path.realpath(__file__)), 'defaults.json')
     if config_path:
         with open(config_path, 'r') as f:
             config = json.load(f)

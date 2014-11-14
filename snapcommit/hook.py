@@ -82,8 +82,7 @@ def run_hook(config):
         device=config['video_device']
     )
 
-
-if __name__ == '__main__':
+def main():
     import sys
     if len(sys.argv) > 1:
         config = load_config(sys.argv[1])
@@ -93,3 +92,7 @@ if __name__ == '__main__':
     if config.get('snap_server') and config['snap_server']:
         upload(config)
     sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,5 +1,6 @@
 import os
 import stat
+import sys
 
 import click
 from click import secho
@@ -41,12 +42,16 @@ def enable():
         if os.path.isfile(hook_path):
             if not _is_enabled(hook_path):
                 write_hook_file(hook_path)
+                sys.exit(0)
             else:
                 secho('snap-commit is already enabled for this repo')
+                sys.exit(0)
         else:
             write_hook_file(hook_path)
+            sys.exit(0)
     else:
         secho('Error: Directory is not a git repository')
+        sys.exit(1)
 
 @cli.command()
 def disable():
@@ -54,12 +59,16 @@ def disable():
         if os.path.isfile(hook_path):
             if _is_enabled(hook_path):
                 disable_hook(hook_path)
+                sys.exit(0)
             else:
                 secho('snap-commit is not enabled for this repo')
+                sys.exit(0)
         else:
             secho('no post-commit file found, snap-commit is not enabled')
+            sys.exit(0)
     else:
         secho('Error: Directory is not a git repository')
+        sys.exit(1)
 
 if __name__ == '__main__':
     cli()

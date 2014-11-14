@@ -8,7 +8,7 @@ from PIL import Image
 def capture_frame(width, height, device='/dev/video0'):
     video = v4l2capture.Video_device(device)
     size = video.set_format(width, height)
-    video.create_buffers(1)
+    video.create_buffers(2)
     video.queue_all_buffers()
     video.start()
     select.select((video,), (), ())

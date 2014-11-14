@@ -44,10 +44,24 @@ def list(ctx):
     image_dir = ctx.obj['image_dir']
     try:
         secho('Listing images in {}'.format(image_dir))
-        for idx, image in enumerate(os.listdir(image_dir)):
+        images = sorted(os.listdir(image_dir))
+        for idx, image in enumerate(images):
             secho('{:03d}. {}'.format(idx + 1, image))
     except OSError, e:
         secho('{}: {}'.format(e.strerror, image_dir))
+
+@cli.command()
+@click.argument('image_id', required=False, type=int)
+@click.pass_context
+def show(ctx, image_id=None):
+    image_dir = ctx.obj['image_dir']
+    if not image_id:
+        click.launch(image_dir, locate=True)
+        return
+    images = sorted(os.listdir(image_dir))
+    image = images[image_id -1]
+    secho('Showing image {}'.format(image))
+    click.launch(os.path.join(image_dir, image))
 
 @cli.command()
 def enable():

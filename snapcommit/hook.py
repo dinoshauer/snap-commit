@@ -25,6 +25,7 @@ def load_config(config_path=None):
                 with open(config_path, 'r') as f:
                     config = json.load(f)
                     break
+    print path.join(path.dirname(path.realpath(__file__)), 'defaults.json')
     if '~' in config['image_dir']:
         config['image_dir'] = config['image_dir'].replace(
             '~',

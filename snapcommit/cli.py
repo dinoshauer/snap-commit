@@ -12,6 +12,7 @@ OK = click.style(u'[\u2713]', bold=True, fg='green')
 BAD = click.style(u'[\u203C]', bold=True, fg='red')
 hook_path = '.git/hooks/post-commit'
 
+
 def _is_enabled(post_commit_file):
     with open(hook_path, 'r') as f:
         contents = f.read()

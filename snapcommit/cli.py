@@ -38,7 +38,7 @@ def disable_hook(hook_path):
 def cli(ctx):
     ctx.obj = snapconfig.load_config()
 
-@cli.command()
+@cli.command(help='List images in IMAGE_DIR')
 @click.pass_context
 def list(ctx):
     image_dir = ctx.obj['image_dir']
@@ -50,7 +50,7 @@ def list(ctx):
     except OSError, e:
         secho('{}: {}'.format(e.strerror, image_dir))
 
-@cli.command()
+@cli.command(help='Open an image in the default viewer')
 @click.argument('image_id', required=False, type=int)
 @click.pass_context
 def show(ctx, image_id=None):
@@ -63,7 +63,7 @@ def show(ctx, image_id=None):
     secho('Showing image {}'.format(image))
     click.launch(os.path.join(image_dir, image))
 
-@cli.command()
+@cli.command(help='Enable snap-commit in the current repo')
 def enable():
     if gitops.is_repo:
         if os.path.isfile(hook_path):
@@ -80,7 +80,7 @@ def enable():
         secho('Error: Directory is not a git repository')
         sys.exit(1)
 
-@cli.command()
+@cli.command(help='Disable snap-commit in the current repo')
 def disable():
     if gitops.is_repo:
         if os.path.isfile(hook_path):

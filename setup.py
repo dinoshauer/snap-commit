@@ -15,7 +15,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'snapcommit = snapcommit.cli:cli',
+            'snap-commit = snapcommit.cli:cli',
+            'snap-commit-hook = snapcommit.hook:main',
         ]
     },
     classifiers=[

@@ -8,7 +8,8 @@ from click import secho
 import snapconfig
 import gitops
 
-
+OK = click.style(u'[\u2713]', bold=True, fg='green')
+BAD = click.style(u'[\u203C]', bold=True, fg='red')
 hook_path = '.git/hooks/post-commit'
 
 def _is_enabled(post_commit_file):
@@ -20,7 +21,7 @@ def write_hook_file(hook_path):
     with open(hook_path, 'a') as f:
         f.write('\nsnap-commit-hook&\n')
     os.chmod(hook_path, os.stat(hook_path).st_mode | stat.S_IEXEC)
-    secho('snap-commit enabled')
+    secho(u'{} snap-commit enabled'.format(OK))
 
 def disable_hook(hook_path):
     with open(hook_path, 'r+') as f:
@@ -30,7 +31,7 @@ def disable_hook(hook_path):
         contents.pop(snap_line[0])
         f.write('\n'.join(contents))
         f.truncate()
-        secho('snap-commit disabled')
+        secho(u'{} snap-commit disabled'.format(OK))
 
 @click.group()
 @click.version_option()
@@ -72,13 +73,13 @@ def enable():
                 write_hook_file(hook_path)
                 sys.exit(0)
             else:
-                secho('snap-commit is already enabled for this repo')
+                secho(u'{} snap-commit is already enabled for this repo'.format(OK))
                 sys.exit(0)
         else:
             write_hook_file(hook_path)
             sys.exit(0)
     else:
-        secho('Error: Directory is not a git repository')
+        secho(u'{} Error: Directory is not a git repository'.format(BAD))
         sys.exit(1)
 
 @cli.command(help='Disable snap-commit in the current repo')
@@ -89,13 +90,13 @@ def disable():
                 disable_hook(hook_path)
                 sys.exit(0)
             else:
-                secho('snap-commit is not enabled for this repo')
+                secho(u'{} snap-commit is not enabled for this repo'.format(OK))
                 sys.exit(0)
         else:
-            secho('no post-commit file found, snap-commit is not enabled')
+            secho(u'{} no post-commit file found, snap-commit is not enabled'.format(OK))
             sys.exit(0)
     else:
-        secho('Error: Directory is not a git repository')
+        secho(u'{} Error: Directory is not a git repository'.format(BAD))
         sys.exit(1)
 
 if __name__ == '__main__':

@@ -49,6 +49,7 @@ def list(ctx):
             secho('{:03d}. {}'.format(idx + 1, image))
     except OSError, e:
         secho('{}: {}'.format(e.strerror, image_dir))
+        sys.exit(1)
 
 @cli.command(help='Open an image in the default viewer')
 @click.argument('image_id', required=False, type=int)

@@ -60,10 +60,14 @@ def show(ctx, image_id=None):
     if not image_id:
         click.launch(image_dir, locate=True)
         return
-    images = sorted(os.listdir(image_dir))
-    image = images[image_id -1]
-    secho('Showing image {}'.format(image))
-    click.launch(os.path.join(image_dir, image))
+    try:
+        images = sorted(os.listdir(image_dir))
+        image = images[image_id -1]
+        secho('Showing image {}'.format(image))
+        click.launch(os.path.join(image_dir, image))
+    except IndexError:
+        secho(u'{} Image id not found'.format(BAD))
+        sys.exit(1)
 
 @cli.command(help='Enable snap-commit in the current repo')
 def enable():

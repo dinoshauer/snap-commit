@@ -1,5 +1,7 @@
 import os
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 from os import path
 
 import requests
@@ -30,6 +32,29 @@ def load_config(config_path=None):
         )
     return config
 
+log_levels = {
+    'info': logging.INFO,
+    'debug': logging.DEBUG,
+    'error': logging.ERROR,
+    'warn': logging.WARNING,
+    'critical': logging.CRITICAL,
+}
+
+def logger(config):
+    log_dir = config['log_dir']
+    if log_dir.startswith('~'):
+        log_dir = log_dir.replace('~', os.path.expanduser('~'))
+    log_file = path.join(log_dir, 'snap-commit-hook.log')
+    if not os.path.isdir(log_dir):
+        os.makedirs(log_dir)
+    handler = RotatingFileHandler(log_file, maxBytes=5242880, backupCount=2)
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+    handler.setFormatter(formatter)
+    logger = logging.getLogger('snap-commit-hook')
+    logger.setLevel(log_levels[config['log_level']])
+    logger.addHandler(handler)
+    return logger
+
 def new_path(prefix=None):
     commit = gitops.get_commit()
     remote = gitops.get_remote_url()
@@ -52,6 +77,7 @@ def new_path(prefix=None):
     return path.join(*paths)
 
 def upload(config):
+    log = config['logger']
     base = config['image_dir']
     for item in os.listdir(base):
         try:
@@ -61,12 +87,19 @@ def upload(config):
                 files={'file': (item, open(filepath, 'rb'))}
             )
             if r.ok:
-                os.remove(filepath)
+                if not config.get('keep_snaps', False):
+                    os.remove(filepath)
+                    log.debug('Removed {}'.format(filepath))
             else:
-                print 'error occurred', r.status_code, r.text
+                log.error('error occurred {} {} while uploading {}'.format(
+                        r.status_code,
+                        r.text,
+                        item
+                    )
+                )
         except requests.exceptions.RequestException, e:
-            print 'error occurred', e
-            print 'saving image for next upload'
+            log.error('error occurred {} while uploading {}'.format(e, item))
+            log.info('saving image for next upload')
 
 def run_hook(config):
     file_path = new_path(config['image_dir'])
@@ -88,6 +121,7 @@ def main():
         config = load_config(sys.argv[1])
     else:
         config = load_config()
+    config['logger'] = logger(config)
     run_hook(config)
     if config.get('snap_server') and config['snap_server']:
         upload(config)

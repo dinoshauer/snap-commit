@@ -5,6 +5,7 @@ import sys
 import click
 from click import secho
 
+import snapconfig
 import gitops
 
 
@@ -33,8 +34,20 @@ def disable_hook(hook_path):
 
 @click.group()
 @click.version_option()
-def cli():
-    pass
+@click.pass_context
+def cli(ctx):
+    ctx.obj = snapconfig.load_config()
+
+@cli.command()
+@click.pass_context
+def list(ctx):
+    image_dir = ctx.obj['image_dir']
+    try:
+        secho('Listing images in {}'.format(image_dir))
+        for idx, image in enumerate(os.listdir(image_dir)):
+            secho('{:03d}. {}'.format(idx + 1, image))
+    except OSError, e:
+        secho('{}: {}'.format(e.strerror, image_dir))
 
 @cli.command()
 def enable():

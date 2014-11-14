@@ -9,8 +9,8 @@ A [lolcommits](http://mroth.github.io/lolcommits/) clone without the lols.
 
 ## Usage:
 
-    $ snap-commit --help
-    Usage: snap-commit [OPTIONS] COMMAND [ARGS]...
+    $ python snapcommit/cli.py  --help
+    Usage: cli.py [OPTIONS] COMMAND [ARGS]...
 
     Options:
       --version  Show the version and exit.
@@ -19,3 +19,5 @@ A [lolcommits](http://mroth.github.io/lolcommits/) clone without the lols.
     Commands:
       disable
       enable
+      list
+

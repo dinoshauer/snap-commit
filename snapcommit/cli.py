@@ -17,7 +17,7 @@ def _is_enabled(post_commit_file):
 
 def write_hook_file(hook_path):
     with open(hook_path, 'a') as f:
-        f.write('\npython /home/k/git/snap-commit/snapcommit/hook.py\n')
+        f.write('\npython /home/k/git/snap-commit/snapcommit/hook.py&\n')
     os.chmod(hook_path, os.stat(hook_path).st_mode | stat.S_IEXEC)
     secho('snap-commit enabled')
 

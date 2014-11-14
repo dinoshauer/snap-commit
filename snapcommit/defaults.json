@@ -5,5 +5,6 @@
     "height": 480,
     "snap_server": "http://0.0.0.0:5000",
     "log_dir": "~/.snap-commits/logs/",
-    "log_level": "info"
+    "log_level": "info",
+    "keep_snaps": false
 }

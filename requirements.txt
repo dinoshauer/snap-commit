@@ -1,4 +1,4 @@
-Pillow==7.1.0
+Pillow==9.0.1
 click==3.3
 pygit2==0.21.4
 requests==2.20.0
